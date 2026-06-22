@@ -130,7 +130,7 @@ function Hero() {
         className="mb-6 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs text-white/60"
       >
         <Star className="w-3 h-3 text-brand" />
-        Backed by Y Combinator W26
+        Backed by Y Combinator Spring '26
       </motion.div>
 
       <motion.h1
@@ -876,7 +876,7 @@ function Footer() {
           </div>
           <p className="text-xs text-white/40 leading-[1.6]">
             Autonomous product marketing for every shipping team.
-            Backed by Y Combinator W26.
+            Backed by Y Combinator Spring '26.
           </p>
         </div>
         <div>
