@@ -38,9 +38,11 @@ function SpotlightCard({ children, className = '', style }: { children: React.Re
 
 function MemoirLogo({ className = 'w-8 h-8' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 32 32" className={className} fill="none">
-      <rect width="32" height="32" rx="7" fill="#E8572A" />
-      <path d="M7 22V10l5.5 8 5.5-8v12M19 10h6M19 16h5M19 22h6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <svg viewBox="0 0 100 100" className={className} fill="currentColor">
+      {/* Left page */}
+      <path d="M 18 12 L 46 24 L 46 80 C 38 88 22 84 18 68 Z" />
+      {/* Right page */}
+      <path d="M 82 12 L 54 24 L 54 80 C 62 88 78 84 82 68 Z" />
     </svg>
   )
 }
@@ -89,9 +91,9 @@ function Navbar() {
       className="relative z-20 w-full py-4"
     >
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <MemoirLogo />
-          <span className="font-semibold text-sm tracking-tight text-white">Memoir</span>
+        <div className="flex items-center gap-2.5 text-white">
+          <MemoirLogo className="w-7 h-7" />
+          <span className="font-semibold text-sm tracking-tight">Memoir</span>
         </div>
         <div className="hidden md:flex items-center gap-8">
           {links.map((link, i) => (
