@@ -154,7 +154,7 @@ function MenuBar() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 0.9, duration: 0.5 }}
-      className="relative z-10 w-full h-10 bg-black/50 backdrop-blur-md border-t border-b border-white/10"
+      className="relative z-10 w-full h-10 bg-black/30 backdrop-blur-md"
     >
       <div className="max-w-6xl mx-auto px-6 h-full flex items-center justify-between text-xs">
         <div className="flex items-center gap-4">
@@ -284,7 +284,7 @@ function DashboardMockup() {
 function LogoCloud() {
   const logos = ['Zatanna', 'Datost', 'Stage', 'TraceRoot', 'Bond', 'Convoy', 'Arc', 'Linear']
   return (
-    <div className="relative z-10 max-w-6xl mx-auto px-6 py-16 md:py-20 border-t border-white/10">
+    <div className="relative z-10 max-w-6xl mx-auto px-6 py-16 md:py-20">
       <p className="text-center text-xs uppercase tracking-widest text-white/40">
         Trusted by the engineering teams that ship
       </p>
@@ -339,7 +339,7 @@ function HowItWorks() {
   ]
 
   return (
-    <section className="relative z-10 max-w-6xl mx-auto px-6 py-20 md:py-28 border-t border-white/10">
+    <section className="relative z-10 max-w-6xl mx-auto px-6 py-20 md:py-28">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -415,7 +415,7 @@ function RealArtifacts() {
   ]
 
   return (
-    <section className="relative z-10 max-w-6xl mx-auto px-6 py-20 md:py-28 border-t border-white/10">
+    <section className="relative z-10 max-w-6xl mx-auto px-6 py-20 md:py-28">
       <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-start">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -485,9 +485,9 @@ function StatsBar() {
       transition={{ duration: 0.7 }}
       className="relative z-10 max-w-6xl mx-auto px-6 py-8"
     >
-      <div className="rounded-2xl bg-white/[0.04] border border-white/10 grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-white/10">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0">
         {stats.map((s, i) => (
-          <div key={i} className="px-8 py-8">
+          <div key={i} className="px-4 md:px-8 py-8">
             <p className="text-4xl font-bold text-white tracking-tight">{s.value}</p>
             <p className="mt-1 text-sm text-white/50 leading-[1.4]">{s.label}</p>
           </div>
@@ -500,7 +500,7 @@ function StatsBar() {
 /* ── Section: The mechanism (3 feature cards) ── */
 function TheMechanism() {
   return (
-    <section className="relative z-10 max-w-6xl mx-auto px-6 py-20 md:py-28 border-t border-white/10">
+    <section className="relative z-10 max-w-6xl mx-auto px-6 py-20 md:py-28">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -629,56 +629,6 @@ function TheMechanism() {
   )
 }
 
-/* ── Section: Testimonials ── */
-function Testimonials() {
-  const quotes = [
-    {
-      text: 'Memoir gave our leadership team four hours of their week back. The posts read like they came directly from our engineering blog — not a marketing tool.',
-      name: 'Alex Oleynik',
-      role: 'Head of Product',
-      company: 'DATOST',
-    },
-    {
-      text: 'We went from "we should write about this launch" to "it\'s already live on LinkedIn" in the same sprint. That velocity change is hard to overstate.',
-      name: 'Sarah Kim',
-      role: 'Co-founder',
-      company: 'STAGE',
-    },
-    {
-      text: 'Content that actually understands what we shipped. Our audience stopped scrolling past our posts after we switched to Memoir.',
-      name: 'Marcus Weber',
-      role: 'Engineering Manager',
-      company: 'TRACEROOT',
-    },
-  ]
-
-  return (
-    <section className="relative z-10 max-w-6xl mx-auto px-6 py-20 md:py-28 border-t border-white/10">
-      <div className="grid md:grid-cols-3 gap-5">
-        {quotes.map((q, i) => (
-          <motion.figure
-            key={i}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1, duration: 0.6 }}
-            className="liquid-glass rounded-2xl p-6"
-          >
-            <blockquote className="text-sm text-white/80 leading-[1.6]">
-              "{q.text}"
-            </blockquote>
-            <figcaption className="mt-6 pt-5 border-t border-white/10">
-              <p className="text-sm font-semibold text-white">{q.name}</p>
-              <p className="text-xs text-white/50">{q.role}</p>
-              <p className="text-xs text-white font-semibold tracking-wide uppercase mt-1">{q.company}</p>
-            </figcaption>
-          </motion.figure>
-        ))}
-      </div>
-    </section>
-  )
-}
-
 /* ── Section: Pricing ── */
 function Pricing() {
   const [yearly, setYearly] = useState(false)
@@ -726,7 +676,7 @@ function Pricing() {
   ]
 
   return (
-    <section className="c3-pricing-section border-t border-white/10">
+    <section className="c3-pricing-section">
       <svg width="0" height="0" style={{ position: 'absolute' }}>
         <defs>
           <filter id="c3-noise">
@@ -828,7 +778,7 @@ function FinalCTA() {
 /* ── Footer ── */
 function Footer() {
   return (
-    <footer className="relative z-10 border-t border-white/10 max-w-6xl mx-auto px-6 py-12">
+    <footer className="relative z-10 max-w-6xl mx-auto px-6 py-12">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
         <div>
           <div className="flex items-center gap-2 mb-3">
@@ -859,7 +809,7 @@ function Footer() {
           ))}
         </div>
       </div>
-      <div className="mt-10 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-white/30">
+      <div className="mt-10 pt-6 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-white/30">
         <span>© 2024 Memoir AI, Inc. All rights reserved.</span>
         <div className="flex gap-4">
           <a href="#" className="hover:text-white/60 transition-colors">Privacy</a>
@@ -905,10 +855,6 @@ export default function App() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#0c0c0c]/60 via-transparent to-[#0c0c0c]/80" />
       </div>
 
-      {/* Guide lines */}
-      <div className="hidden md:block pointer-events-none fixed inset-y-0 left-1/2 -translate-x-[calc(50%+36rem)] w-px bg-white/10 z-[5]" />
-      <div className="hidden md:block pointer-events-none fixed inset-y-0 left-1/2 translate-x-[calc(-50%+36rem)] w-px bg-white/10 z-[5]" />
-
       {/* Sections */}
       <Navbar />
       <Hero />
@@ -919,7 +865,6 @@ export default function App() {
       <RealArtifacts />
       <StatsBar />
       <TheMechanism />
-      <Testimonials />
       <Pricing />
       <FinalCTA />
       <Footer />
