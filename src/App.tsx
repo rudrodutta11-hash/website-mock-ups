@@ -15,9 +15,22 @@ function SpotlightCard({ children, className = '', style }: { children: React.Re
     ref.current.style.setProperty('--my', `${e.clientY - r.top}px`)
   }
   return (
-    <div ref={ref} onMouseMove={handleMouseMove} className={`spotlight-card ${className}`} style={style}>
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      className={`spotlight-card ${className}`}
+      style={style}
+      whileHover={{
+        rotate: [0, 0.5, -0.4, 0.25, 0],
+        scale: 1.012,
+        transition: {
+          rotate: { duration: 0.35, ease: 'easeOut' },
+          scale: { duration: 0.2, ease: 'easeOut' },
+        },
+      }}
+    >
       {children}
-    </div>
+    </motion.div>
   )
 }
 
@@ -117,7 +130,7 @@ function Hero() {
         className="mb-6 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs text-white/60"
       >
         <Star className="w-3 h-3 text-brand" />
-        Backed by Y Combinator F24
+        Backed by Y Combinator W26
       </motion.div>
 
       <motion.h1
@@ -863,7 +876,7 @@ function Footer() {
           </div>
           <p className="text-xs text-white/40 leading-[1.6]">
             Autonomous product marketing for every shipping team.
-            Backed by Y Combinator F24.
+            Backed by Y Combinator W26.
           </p>
         </div>
         <div>
