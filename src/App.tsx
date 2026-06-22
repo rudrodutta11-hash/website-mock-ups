@@ -9,8 +9,8 @@ import {
    Hero ambient:   Higgsfield job df692f3a-6c52-4f74-932b-2e7c8d811a47
    Gradebook demo: Higgsfield job b7e3b60a-5bd9-4d22-850d-779a924bd848
 ───────────────────────────────────────────────────────────── */
-const HERO_VIDEO_SRC = ''
-const DEMO_VIDEO_SRC = ''
+const HERO_VIDEO_SRC = 'https://d8j0ntlcm91z4.cloudfront.net/user_3FMa3cCSAif4KRSbwmQBJ5w0oIN/hf_20260622_220629_df692f3a-6c52-4f74-932b-2e7c8d811a47.mp4'
+const DEMO_VIDEO_SRC = 'https://d8j0ntlcm91z4.cloudfront.net/user_3FMa3cCSAif4KRSbwmQBJ5w0oIN/hf_20260622_220631_b7e3b60a-5bd9-4d22-850d-779a924bd848.mp4'
 
 /* ─── Count-up hook ─── */
 function useCountUp(end: number, duration = 1800, trigger = false) {
