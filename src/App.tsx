@@ -1,9 +1,25 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { motion } from 'motion/react'
 import {
   ChevronRight, Menu, Sparkles, Rss, Video, Send,
   TrendingUp, Link2, Mic, Edit3, Star,
 } from 'lucide-react'
+
+/* ── Spotlight card: mouse-following glow ── */
+function SpotlightCard({ children, className = '', style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return
+    const r = ref.current.getBoundingClientRect()
+    ref.current.style.setProperty('--mx', `${e.clientX - r.left}px`)
+    ref.current.style.setProperty('--my', `${e.clientY - r.top}px`)
+  }
+  return (
+    <div ref={ref} onMouseMove={handleMouseMove} className={`spotlight-card ${className}`} style={style}>
+      {children}
+    </div>
+  )
+}
 
 /* ── Primitives ── */
 
@@ -313,36 +329,8 @@ function LogoCloud() {
   )
 }
 
-/* ── Section: How it works (4 pillars) ── */
+/* ── Section: How it works (bento pillars) ── */
 function HowItWorks() {
-  const pillars = [
-    {
-      num: '01',
-      icon: <Rss className="w-5 h-5" />,
-      title: 'Reads',
-      desc: 'Memoir watches your PRs, releases, and customer calls — surfacing what your audience actually cares about.',
-    },
-    {
-      num: '02',
-      icon: <Edit3 className="w-5 h-5" />,
-      title: 'Writes',
-      active: true,
-      desc: 'Auto-generates short product demo videos for every launch. Why Chorus schema diffs top the founder\'s voice.',
-    },
-    {
-      num: '03',
-      icon: <Video className="w-5 h-5" />,
-      title: 'Records',
-      desc: 'Auto-generates short product demo videos for every launch. No Loom fatigue, no screen-record anxiety.',
-    },
-    {
-      num: '04',
-      icon: <Send className="w-5 h-5" />,
-      title: 'Publishes',
-      desc: 'Ships when your audience is awake. Routes finished content back to your founders automatically.',
-    },
-  ]
-
   return (
     <section className="relative z-10 max-w-6xl mx-auto px-6 py-20 md:py-28">
       <motion.div
@@ -361,24 +349,65 @@ function HowItWorks() {
         </h2>
       </motion.div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {pillars.map((p, i) => (
-          <motion.div
-            key={p.num}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1, duration: 0.6 }}
-            className={`liquid-glass rounded-2xl p-5 ${p.active ? 'bg-brand/20 border border-brand/30' : ''}`}
+      {/* Bento grid: [Reads] [Writes - 2×wide featured] / [Records - 2×wide] [Publishes] */}
+      <div className="grid grid-cols-3 gap-4">
+
+        {/* Reads — tall narrow pill */}
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0, duration: 0.6 }}>
+          <SpotlightCard className="liquid-glass h-full p-6 flex flex-col" style={{ borderRadius: '2rem 2rem 0.5rem 2rem' }}>
+            <span className="text-[10px] font-semibold text-white/25 mb-4">01</span>
+            <Rss className="w-5 h-5 text-white/50 mb-4" />
+            <h3 className="text-lg font-semibold text-white mb-3">Reads</h3>
+            <p className="text-xs text-white/50 leading-[1.7] mt-auto">
+              Memoir watches your PRs, releases, and customer calls — surfacing what your audience actually cares about.
+            </p>
+          </SpotlightCard>
+        </motion.div>
+
+        {/* Writes — wide featured, 2 columns, brand-tinted */}
+        <motion.div className="col-span-2" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1, duration: 0.6 }}>
+          <SpotlightCard
+            className="liquid-glass h-full p-6 flex flex-col"
+            style={{ borderRadius: '2rem 2rem 2rem 0.5rem', background: 'rgba(232,87,42,0.08)', border: '1px solid rgba(232,87,42,0.2)' }}
           >
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-[10px] font-semibold text-white/30">{p.num}</span>
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-[10px] font-semibold text-brand/60">02 · Featured</span>
+              <span className="text-[10px] px-2 py-1 rounded-full bg-brand/20 text-brand font-semibold">Active now</span>
             </div>
-            <div className={`mb-3 ${p.active ? 'text-brand' : 'text-white/60'}`}>{p.icon}</div>
-            <h3 className="text-base font-semibold text-white mb-2">{p.title}</h3>
-            <p className="text-xs text-white/50 leading-[1.6]">{p.desc}</p>
-          </motion.div>
-        ))}
+            <Edit3 className="w-6 h-6 text-brand mb-4" />
+            <h3 className="text-2xl font-bold text-white mb-3">Writes</h3>
+            <p className="text-sm text-white/60 leading-[1.7] max-w-sm">
+              Turns every shipped feature into a polished post, thread, or story — in your founder's voice, not a generic AI one.
+            </p>
+          </SpotlightCard>
+        </motion.div>
+
+        {/* Records — 2 columns wide */}
+        <motion.div className="col-span-2" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.6 }}>
+          <SpotlightCard className="liquid-glass p-6 flex flex-col sm:flex-row sm:items-center gap-6" style={{ borderRadius: '0.5rem 2rem 2rem 2rem' }}>
+            <Video className="w-5 h-5 text-white/50 flex-shrink-0" />
+            <div>
+              <span className="text-[10px] font-semibold text-white/25 block mb-1">03</span>
+              <h3 className="text-lg font-semibold text-white mb-1">Records</h3>
+              <p className="text-xs text-white/50 leading-[1.7]">
+                Auto-generates short product demo videos for every launch. No Loom fatigue, no screen-record anxiety.
+              </p>
+            </div>
+          </SpotlightCard>
+        </motion.div>
+
+        {/* Publishes — narrow tall pill */}
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3, duration: 0.6 }}>
+          <SpotlightCard className="liquid-glass h-full p-6 flex flex-col" style={{ borderRadius: '0.5rem 2rem 2rem 2rem' }}>
+            <span className="text-[10px] font-semibold text-white/25 mb-4">04</span>
+            <Send className="w-5 h-5 text-white/50 mb-4" />
+            <h3 className="text-lg font-semibold text-white mb-3">Publishes</h3>
+            <p className="text-xs text-white/50 leading-[1.7] mt-auto">
+              Ships when your audience is awake. Routes finished content back to your founders automatically.
+            </p>
+          </SpotlightCard>
+        </motion.div>
+
       </div>
     </section>
   )
@@ -453,20 +482,58 @@ function RealArtifacts() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.15, duration: 0.7 }}
-          className="grid grid-cols-2 gap-3"
+          className="flex flex-col gap-3"
         >
-          {posts.map((post, i) => (
-            <div key={i} className="liquid-glass rounded-xl p-3">
-              <div className="flex items-center gap-1.5 mb-2">
-                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded" style={{ color: post.badgeColor, background: `${post.badgeColor}20` }}>
+          {/* Featured wide card — pill shape */}
+          <SpotlightCard
+            className="liquid-glass p-4"
+            style={{ borderRadius: '1.5rem 1.5rem 0.75rem 1.5rem' }}
+          >
+            <div className="flex items-start gap-4">
+              <div className="flex-1 min-w-0">
+                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded mb-2 inline-block" style={{ color: posts[0].badgeColor, background: `${posts[0].badgeColor}20` }}>
+                  {posts[0].badge}
+                </span>
+                <p className="text-sm font-semibold text-white mb-1 leading-[1.3]">{posts[0].title}</p>
+                <p className="text-[11px] text-white/60 leading-[1.5]">{posts[0].preview}</p>
+              </div>
+              <span className="text-[10px] text-white/25 whitespace-nowrap pt-1">{posts[0].stats}</span>
+            </div>
+          </SpotlightCard>
+
+          {/* Two smaller cards side by side */}
+          <div className="grid grid-cols-2 gap-3">
+            {posts.slice(1, 3).map((post, i) => (
+              <SpotlightCard
+                key={i}
+                className="liquid-glass p-3"
+                style={{ borderRadius: i === 0 ? '0.75rem 1.5rem 1.5rem 0.75rem' : '1.5rem 0.75rem 0.75rem 1.5rem' }}
+              >
+                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded mb-2 inline-block" style={{ color: post.badgeColor, background: `${post.badgeColor}20` }}>
                   {post.badge}
                 </span>
+                {post.title && <p className="text-xs font-semibold text-white mb-1 leading-[1.3]">{post.title}</p>}
+                <p className="text-[11px] text-white/60 leading-[1.5] line-clamp-3">{post.preview}</p>
+                <p className="text-[10px] text-white/30 mt-2">{post.stats}</p>
+              </SpotlightCard>
+            ))}
+          </div>
+
+          {/* Last card — wide pill */}
+          <SpotlightCard
+            className="liquid-glass p-3"
+            style={{ borderRadius: '0.75rem 1.5rem 1.5rem 1.5rem' }}
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded flex-shrink-0" style={{ color: posts[3].badgeColor, background: `${posts[3].badgeColor}20` }}>
+                  {posts[3].badge}
+                </span>
+                <p className="text-[11px] text-white/60 leading-[1.5] truncate">{posts[3].preview}</p>
               </div>
-              {post.title && <p className="text-xs font-semibold text-white mb-1 leading-[1.3]">{post.title}</p>}
-              <p className="text-[11px] text-white/60 leading-[1.5] line-clamp-3">{post.preview}</p>
-              <p className="text-[10px] text-white/30 mt-2">{post.stats}</p>
+              <span className="text-[10px] text-white/25 flex-shrink-0">{posts[3].stats}</span>
             </div>
-          ))}
+          </SpotlightCard>
         </motion.div>
       </div>
     </section>
@@ -490,11 +557,11 @@ function StatsBar() {
       transition={{ duration: 0.7 }}
       className="relative z-10 max-w-6xl mx-auto px-6 py-8"
     >
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-6 md:gap-x-0">
         {stats.map((s, i) => (
-          <div key={i} className="px-4 md:px-8 py-8">
-            <p className="text-4xl font-bold text-white tracking-tight">{s.value}</p>
-            <p className="mt-1 text-sm text-white/50 leading-[1.4]">{s.label}</p>
+          <div key={i} className="px-4 md:px-8">
+            <p className="text-5xl md:text-6xl font-black text-white tracking-tight leading-none">{s.value}</p>
+            <p className="mt-3 text-sm text-white/40 leading-[1.4] max-w-[12rem]">{s.label}</p>
           </div>
         ))}
       </div>
@@ -530,8 +597,8 @@ function TheMechanism() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="liquid-glass rounded-2xl p-6"
         >
+        <SpotlightCard className="liquid-glass p-6 h-full" style={{ borderRadius: '2rem 0.5rem 2rem 2rem' }}>
           <div className="flex items-center gap-2 mb-4">
             <span className="text-[10px] font-semibold text-white/30 uppercase tracking-wider">01 · Dual purpose</span>
           </div>
@@ -557,6 +624,7 @@ function TheMechanism() {
             ))}
             <div className="text-xs text-brand mt-1">relevance 0.72</div>
           </div>
+        </SpotlightCard>
         </motion.div>
 
         {/* Feature 2 */}
@@ -565,8 +633,8 @@ function TheMechanism() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1, duration: 0.6 }}
-          className="liquid-glass rounded-2xl p-6 bg-white/[0.03]"
         >
+        <SpotlightCard className="liquid-glass p-6 h-full" style={{ borderRadius: '0.5rem 2rem 2rem 2rem', background: 'rgba(255,255,255,0.02)' }}>
           <div className="flex items-center gap-2 mb-4">
             <span className="text-[10px] font-semibold text-white/30 uppercase tracking-wider">02 · Audience attribution</span>
           </div>
@@ -586,16 +654,18 @@ function TheMechanism() {
               → your product — answer this
             </button>
           </div>
+        </SpotlightCard>
         </motion.div>
 
-        {/* Feature 3 — full width */}
+        {/* Feature 3 — full width, angled shape */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="liquid-glass rounded-2xl p-6 md:col-span-2"
+          className="md:col-span-2"
         >
+        <SpotlightCard className="liquid-glass p-6" style={{ borderRadius: '0.5rem 2rem 2rem 0.5rem' }}>
           <div className="flex items-center gap-2 mb-4">
             <span className="text-[10px] font-semibold text-white/30 uppercase tracking-wider">03 · AI-native · Learns rapidly</span>
           </div>
@@ -628,6 +698,7 @@ function TheMechanism() {
               </div>
             ))}
           </div>
+        </SpotlightCard>
         </motion.div>
       </div>
     </section>
@@ -748,7 +819,7 @@ function FinalCTA() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.7 }}
-        className="liquid-glass relative overflow-hidden rounded-3xl px-8 py-16 md:py-24 text-center"
+        className="spotlight-card liquid-glass relative overflow-hidden rounded-3xl px-8 py-16 md:py-24 text-center"
       >
         <div
           className="absolute inset-0 opacity-30 pointer-events-none"

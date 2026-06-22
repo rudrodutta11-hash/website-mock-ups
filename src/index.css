@@ -32,6 +32,34 @@ html, body {
   animation: ticker 30s linear infinite;
 }
 
+/* ── Spotlight hover glow ── */
+.spotlight-card {
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+}
+
+.spotlight-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.spotlight-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  background: radial-gradient(380px circle at var(--mx) var(--my), rgba(232, 87, 42, 0.18), transparent 65%);
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.spotlight-card:hover::after {
+  opacity: 1;
+}
+
 .liquid-glass {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(8px);
