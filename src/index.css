@@ -39,6 +39,20 @@ html, body {
 .animate-float-medium { animation: float-medium  4.8s ease-in-out infinite; }
 .animate-float-fast   { animation: float-fast    3.4s ease-in-out infinite; }
 
+/* ── Hero showcase overlay transitions ── */
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUpOverlay {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-overlay { animation: fadeInOverlay 0.4s ease-out forwards; }
+.animate-slide-up-overlay { animation: slideUpOverlay 0.5s ease-out forwards; }
+
 /* ── Spotlight card (light-theme blue glow) ── */
 .studyo-card {
   --mx: 50%;

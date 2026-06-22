@@ -1,7 +1,8 @@
 import { useRef, useEffect, useState } from 'react'
 import { motion, useInView } from 'motion/react'
 import {
-  ChevronRight, Menu, Sparkles, FileSpreadsheet, Users, BarChart3, Shield, Play,
+  ChevronRight, Menu, Sparkles, FileSpreadsheet, Users, BarChart3, Shield,
+  BookOpen, GraduationCap, Check, FileText, AlertCircle,
 } from 'lucide-react'
 
 /* ─────────────────────────────────────────────────────────────
@@ -152,45 +153,227 @@ function Navbar() {
 /* ─── Hero ─── */
 const heroWords = ['Grading.', 'Simplified.', 'Beautifully.']
 
+/* Tab definitions for the hero showcase */
+const showcaseTabs = [
+  { id: 'students',  label: 'Students',  Icon: Users },
+  { id: 'grading',   label: 'Grading',   Icon: FileSpreadsheet },
+  { id: 'insights',  label: 'Insights',  Icon: BarChart3 },
+  { id: 'materials', label: 'Materials', Icon: BookOpen },
+] as const
+
+type TabId = typeof showcaseTabs[number]['id']
+
+const avatarColors: Record<string, string> = {
+  AS: '#10b981', PP: '#4f6ef7', RI: '#8b5cf6', AR: '#f59e0b', VN: '#ec4899',
+}
+
+function OverlayCard({ tab }: { tab: TabId }) {
+  if (tab === 'students') {
+    const roster = [
+      { initials: 'AS', name: 'Aarav Sharma', meta: '96% attendance' },
+      { initials: 'PP', name: 'Priya Patel', meta: '98% attendance' },
+      { initials: 'RI', name: 'Rohan Iyer', meta: '89% attendance' },
+    ]
+    return (
+      <div>
+        <div className="flex items-center gap-2 mb-4">
+          <GraduationCap className="w-4 h-4 text-[#4f6ef7]"/>
+          <span className="text-sm font-semibold text-[#1a1f36]">Class 10A</span>
+          <span className="ml-auto text-[11px] font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">24 students</span>
+        </div>
+        <div className="space-y-2.5">
+          {roster.map(r => (
+            <div key={r.initials} className="flex items-center gap-3">
+              <span className="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0"
+                style={{ background: avatarColors[r.initials] }}>{r.initials}</span>
+              <div className="min-w-0">
+                <p className="text-[13px] font-medium text-[#1a1f36] truncate">{r.name}</p>
+                <p className="text-[11px] text-gray-400">{r.meta}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (tab === 'grading') {
+    const rows = [
+      { name: 'Aarav Sharma', score: 89 },
+      { name: 'Priya Patel', score: 93 },
+      { name: 'Rohan Iyer', score: 81 },
+    ]
+    return (
+      <div>
+        <div className="flex items-center gap-2 mb-4">
+          <FileSpreadsheet className="w-4 h-4 text-[#10b981]"/>
+          <span className="text-sm font-semibold text-[#1a1f36]">Gradebook</span>
+          <span className="ml-auto text-[11px] text-gray-400">Auto-calculated</span>
+        </div>
+        <div className="space-y-2">
+          {rows.map(r => (
+            <div key={r.name} className="flex items-center gap-3">
+              <span className="text-[13px] text-[#1a1f36] flex-1 truncate">{r.name}</span>
+              <div className="w-20 h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                <div className="h-full rounded-full bg-[#10b981]" style={{ width: `${r.score}%` }}/>
+              </div>
+              <span className="text-[13px] font-bold text-[#1a1f36] w-9 text-right">{r.score}%</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (tab === 'insights') {
+    return (
+      <div>
+        <div className="flex items-center gap-2 mb-4">
+          <BarChart3 className="w-4 h-4 text-[#8b5cf6]"/>
+          <span className="text-sm font-semibold text-[#1a1f36]">Class Insights</span>
+        </div>
+        <div className="space-y-3 mb-3">
+          {[
+            { label: 'Class average', val: 87, color: '#4f6ef7' },
+            { label: 'Top performer', val: 93, color: '#10b981' },
+          ].map(b => (
+            <div key={b.label}>
+              <div className="flex justify-between text-[11px] mb-1">
+                <span className="text-gray-500">{b.label}</span>
+                <span className="font-semibold text-[#1a1f36]">{b.val}%</span>
+              </div>
+              <div className="h-1.5 rounded-full bg-gray-100 overflow-hidden">
+                <div className="h-full rounded-full" style={{ width: `${b.val}%`, background: b.color }}/>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex items-center gap-2 text-[11px] text-amber-600 bg-amber-50 rounded-lg px-2.5 py-2">
+          <AlertCircle className="w-3.5 h-3.5 flex-shrink-0"/>
+          3 students need attention before exams
+        </div>
+      </div>
+    )
+  }
+
+  // materials
+  const files = [
+    { name: 'Chapter 5 — Trigonometry.pdf', status: 'Shared', isNew: false },
+    { name: 'Practice Set 3.pdf', status: 'Shared', isNew: false },
+    { name: 'Sample Paper 2026.pdf', status: 'New', isNew: true },
+  ]
+  return (
+    <div>
+      <div className="flex items-center gap-2 mb-4">
+        <BookOpen className="w-4 h-4 text-[#f59e0b]"/>
+        <span className="text-sm font-semibold text-[#1a1f36]">Shared with Class 10A</span>
+      </div>
+      <div className="space-y-2">
+        {files.map(f => (
+          <div key={f.name} className="flex items-center gap-2.5">
+            <FileText className="w-4 h-4 text-gray-400 flex-shrink-0"/>
+            <span className="text-[13px] text-[#1a1f36] flex-1 truncate">{f.name}</span>
+            <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${f.isNew ? 'bg-[#10b981]/10 text-[#10b981]' : 'bg-gray-100 text-gray-400'}`}>{f.status}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function HeroShowcase() {
+  const [activeTab, setActiveTab] = useState<TabId>('students')
+
+  // Auto-cycle every 4s; resets when the user clicks a tab
+  useEffect(() => {
+    const id = setTimeout(() => {
+      const idx = showcaseTabs.findIndex(t => t.id === activeTab)
+      setActiveTab(showcaseTabs[(idx + 1) % showcaseTabs.length].id)
+    }, 4000)
+    return () => clearTimeout(id)
+  }, [activeTab])
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 1.0, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      className="w-full max-w-4xl mx-auto"
+    >
+      {/* Tab bar */}
+      <div className="flex justify-center mb-6">
+        <div className="inline-flex flex-wrap justify-center gap-1 bg-gray-100 rounded-xl p-1">
+          {showcaseTabs.map(({ id, label, Icon }) => (
+            <button
+              key={id}
+              onClick={() => setActiveTab(id)}
+              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                activeTab === id ? 'bg-white text-[#1a1f36] shadow-sm' : 'text-gray-500 hover:text-[#1a1f36]'
+              }`}
+            >
+              <Icon className="w-4 h-4"/>
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Video + overlay */}
+      <div className="relative rounded-3xl overflow-hidden border border-gray-200 shadow-2xl h-[380px] md:h-[480px] bg-gray-100">
+        {HERO_VIDEO_SRC && (
+          <video autoPlay loop muted playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+            src={HERO_VIDEO_SRC}
+          />
+        )}
+        {/* Scrim for overlay readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/55 via-white/10 to-transparent"/>
+
+        {/* Overlay card — re-animates on tab change via key */}
+        <div className="absolute inset-0 flex items-center p-5 md:p-10">
+          <div key={activeTab} className="animate-fade-in-overlay w-full max-w-xs">
+            <div className="animate-slide-up-overlay bg-white/90 backdrop-blur-xl rounded-2xl border border-white/70 shadow-xl p-5">
+              <OverlayCard tab={activeTab}/>
+            </div>
+          </div>
+        </div>
+
+        {/* Progress dots */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
+          {showcaseTabs.map(({ id }) => (
+            <span key={id} className={`h-1.5 rounded-full transition-all ${activeTab === id ? 'w-6 bg-[#1a1f36]' : 'w-1.5 bg-[#1a1f36]/30'}`}/>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 function Hero() {
   return (
     <section className="relative z-10 overflow-hidden">
-      {/* Ambient video background — very subtle, multiply blend */}
-      {HERO_VIDEO_SRC && (
-        <div className="absolute inset-0 pointer-events-none">
-          <video autoPlay loop muted playsInline
-            className="w-full h-full object-cover"
-            style={{ opacity: 0.07, mixBlendMode: 'multiply' }}
-            src={HERO_VIDEO_SRC}
-          />
-        </div>
-      )}
-
-      {/* Floating books */}
-      <div className="absolute left-2 md:left-10 top-16 animate-float-slow pointer-events-none hidden md:block">
-        <SpiralNotebook className="w-28 h-32 opacity-65"/>
+      {/* Floating books framing the hero */}
+      <div className="absolute left-2 top-24 animate-float-slow pointer-events-none hidden xl:block">
+        <SpiralNotebook className="w-24 h-28 opacity-55"/>
       </div>
-      <div className="absolute right-6 md:right-14 top-20 animate-float-medium pointer-events-none hidden md:block">
-        <OpenBook className="w-44 h-32 opacity-50"/>
-      </div>
-      <div className="absolute right-20 bottom-8 animate-float-fast pointer-events-none hidden lg:block">
-        <SpiralNotebook className="w-20 h-24 opacity-40"/>
+      <div className="absolute right-4 top-28 animate-float-medium pointer-events-none hidden xl:block">
+        <OpenBook className="w-40 h-28 opacity-45"/>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-28 text-center flex flex-col items-center">
+      <div className="max-w-4xl mx-auto px-6 pt-20 pb-16 text-center flex flex-col items-center">
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 8, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 0.15, duration: 0.5 }}
-          className="mb-10 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-200 shadow-sm text-xs text-gray-500 font-medium"
+          className="mb-9 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-200 shadow-sm text-xs text-gray-500 font-medium"
         >
           <Sparkles className="w-3.5 h-3.5 text-[#4f6ef7]"/>
           Built for private tuition teachers in India
         </motion.div>
 
         {/* Headline — word by word */}
-        <h1 className="mb-8 leading-[1.05] tracking-tight text-[#1a1f36]">
+        <h1 className="mb-7 leading-[1.05] tracking-tight text-[#1a1f36]">
           {heroWords.map((word, i) => (
             <motion.span
               key={word}
@@ -220,7 +403,7 @@ function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.92, duration: 0.5 }}
-          className="mt-9 flex flex-col sm:flex-row items-center gap-4"
+          className="mt-8 mb-14 flex flex-col sm:flex-row items-center gap-4"
         >
           <button className="group inline-flex items-center gap-2 rounded-full bg-[#1a1f36] text-white font-semibold text-sm px-7 py-3.5 hover:bg-[#1a1f36]/90 transition-all active:scale-[0.98]">
             Start for Free
@@ -231,6 +414,9 @@ function Hero() {
             <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"/>
           </button>
         </motion.div>
+
+        {/* Prominent video + interactive tab overlays */}
+        <HeroShowcase/>
       </div>
     </section>
   )
@@ -420,69 +606,85 @@ function Stats() {
   )
 }
 
-/* ─── Demo Video Section ─── */
-function DemoVideo() {
+/* ─── Paper → Digital split section (writing video) ─── */
+function PaperToDigital() {
   return (
     <section className="relative z-10 max-w-6xl mx-auto px-6 py-16 md:py-24">
-      {/* Floating books */}
-      <div className="absolute -left-4 top-20 animate-float-slow pointer-events-none hidden lg:block">
-        <OpenBook className="w-36 h-28 opacity-40"/>
-      </div>
-      <div className="absolute -right-4 bottom-12 animate-float-medium pointer-events-none hidden lg:block">
+      {/* Floating book */}
+      <div className="absolute -right-4 top-10 animate-float-slow pointer-events-none hidden lg:block">
         <SpiralNotebook className="w-24 h-28 opacity-45"/>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.65 }}
-        className="text-center mb-12"
-      >
-        <h2 className="text-4xl md:text-5xl font-bold text-[#1a1f36] tracking-tight">
-          See it in action.
-        </h2>
-        <p className="mt-4 text-gray-500 text-base max-w-sm mx-auto">
-          Watch how grading feels when the tool actually gets out of your way.
-        </p>
-      </motion.div>
+      <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+        {/* Left: copy */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+        >
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#4f6ef7] uppercase tracking-wider mb-4">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#4f6ef7]"/>
+            From paper to digital
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold text-[#1a1f36] tracking-tight leading-[1.05]">
+            Grade the way<br/>you always have.
+          </h2>
+          <p className="mt-5 text-gray-500 text-base leading-relaxed max-w-md">
+            Still mark by hand in your register? Good. Studyo mirrors the exact
+            rows and columns you already use — so the jump from pen-and-paper to a
+            living, auto-calculating gradebook feels like no jump at all.
+          </p>
+          <ul className="mt-6 space-y-3">
+            {[
+              'Same layout as your physical register',
+              'Totals and percentages update instantly',
+              'Every batch saved, searchable, and private',
+            ].map(item => (
+              <li key={item} className="flex items-center gap-3 text-sm text-[#1a1f36]">
+                <span className="w-5 h-5 rounded-full bg-[#10b981]/12 flex items-center justify-center flex-shrink-0">
+                  <Check className="w-3 h-3 text-[#10b981]"/>
+                </span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 32 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-        className="bg-white rounded-2xl border border-gray-200 shadow-xl overflow-hidden"
-      >
-        {/* macOS chrome */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50/80">
-          <div className="flex gap-1.5">
-            <span className="w-3 h-3 rounded-full bg-[#ff5f57]"/>
-            <span className="w-3 h-3 rounded-full bg-[#febc2e]"/>
-            <span className="w-3 h-3 rounded-full bg-[#28c840]"/>
+        {/* Right: writing video in a clean frame */}
+        <motion.div
+          initial={{ opacity: 0, y: 32, rotate: 1 }}
+          whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="relative"
+        >
+          <div className="rounded-3xl overflow-hidden border border-gray-200 shadow-2xl bg-gray-100 aspect-[4/3]">
+            {DEMO_VIDEO_SRC && (
+              <video autoPlay loop muted playsInline
+                className="w-full h-full object-cover"
+                src={DEMO_VIDEO_SRC}
+              />
+            )}
           </div>
-          <span className="text-xs text-gray-400">studyo — Demo</span>
-          <div className="w-14"/>
-        </div>
-
-        {/* Video or placeholder */}
-        <div className="relative bg-gray-50 aspect-video flex items-center justify-center">
-          {DEMO_VIDEO_SRC ? (
-            <video
-              autoPlay loop muted playsInline
-              className="w-full h-full object-cover"
-              src={DEMO_VIDEO_SRC}
-            />
-          ) : (
-            <div className="flex flex-col items-center gap-4 text-gray-300">
-              <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center">
-                <Play className="w-7 h-7 text-gray-400 ml-1"/>
-              </div>
-              <p className="text-sm text-gray-400 font-medium">Demo video coming soon</p>
+          {/* Floating "result" chip */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            className="absolute -bottom-4 -left-4 bg-white rounded-xl border border-gray-200 shadow-lg px-4 py-3 flex items-center gap-3"
+          >
+            <span className="w-9 h-9 rounded-lg bg-[#10b981]/12 flex items-center justify-center">
+              <FileSpreadsheet className="w-4 h-4 text-[#10b981]"/>
+            </span>
+            <div>
+              <p className="text-[11px] text-gray-400 leading-none mb-1">Class average</p>
+              <p className="text-base font-bold text-[#1a1f36] leading-none">87%</p>
             </div>
-          )}
-        </div>
-      </motion.div>
+          </motion.div>
+        </motion.div>
+      </div>
     </section>
   )
 }
@@ -550,8 +752,8 @@ export default function App() {
       <Hero/>
       <GradebookMockup/>
       <Features/>
+      <PaperToDigital/>
       <Stats/>
-      <DemoVideo/>
       <CTA/>
       <Footer/>
     </div>
