@@ -280,29 +280,34 @@ function DashboardMockup() {
   )
 }
 
-/* ── Section: Logo cloud ── */
+/* ── Section: Logo cloud (scrolling ticker) ── */
 function LogoCloud() {
-  const logos = ['Zatanna', 'Datost', 'Stage', 'TraceRoot', 'Bond', 'Convoy', 'Arc', 'Linear']
+  const logos = ['Datost', 'Stage', 'TraceRoot.ai', 'BOND', 'smol machines', 'zatanna']
+
   return (
-    <div className="relative z-10 max-w-6xl mx-auto px-6 py-16 md:py-20">
-      <p className="text-center text-xs uppercase tracking-widest text-white/40">
-        Trusted by the engineering teams that ship
+    <div className="relative z-10 py-16 md:py-20 overflow-hidden">
+      <p className="text-center text-xs uppercase tracking-widest text-white/40 mb-10">
+        Trusted by top engineering teams
       </p>
-      <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-6">
-        {logos.map((name, i) => (
-          <motion.div
-            key={name}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.05, duration: 0.4 }}
-            className="flex items-center justify-center"
-          >
-            <span className="text-sm font-semibold tracking-tight text-white/40 hover:text-white/80 transition-colors cursor-default">
+      <div className="relative flex overflow-hidden">
+        {/* fade edges */}
+        <div className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
+          style={{ background: 'linear-gradient(to right, #0c0c0c, transparent)' }} />
+        <div className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
+          style={{ background: 'linear-gradient(to left, #0c0c0c, transparent)' }} />
+
+        {/* duplicated list for seamless loop */}
+        <div className="flex animate-ticker whitespace-nowrap">
+          {[...logos, ...logos].map((name, i) => (
+            <span
+              key={i}
+              className="inline-flex items-center mx-10 text-sm font-semibold tracking-tight text-white/40 hover:text-white/70 transition-colors cursor-default"
+            >
+              <span className="mr-10 text-white/15">·</span>
               {name}
             </span>
-          </motion.div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   )
